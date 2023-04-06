@@ -6,7 +6,7 @@ services:
     container_name: todo_db
     restart: always
     networks:
-      ghost:
+      todo:
         aliases:
           - database
     environment:
@@ -18,3 +18,11 @@ services:
       - "5432:5432"
     volumes:
       - dbdata:/var/lib/postgresql/data
+
+volumes:
+  dbdata:
+  cache:
+    driver: local
+
+networks:
+  todo:
