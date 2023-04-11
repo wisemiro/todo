@@ -1,4 +1,4 @@
-com/TodoServlet.class
 com/example/config/DatabaseConn.class
+com/example/servlets/TodoServlet.class
 com/example/models/Todo.class
 com/example/config/DatabaseBootstrap.class

@@ -1,5 +1,5 @@
 deploy:
-	mvn clean package wildfly:deploy
+	mvn clean compile package wildfly:deploy
 
 install:
 	mvn clean install

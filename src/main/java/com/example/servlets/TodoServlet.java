@@ -1,4 +1,4 @@
-package com;
+package com.example.servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -20,15 +22,53 @@ import com.example.models.Todo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebServlet("/todo/*")
-
 public class TodoServlet extends HttpServlet {
 
-    protected void listTodo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ServletContext scx = getServletContext();
-        Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
-        resp.setContentType("application/json");
+    private Map<String, Controller> controllers;
 
-        List<Todo> todos = new ArrayList<Todo>();
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        controllers = new HashMap<>();
+        controllers.put("/todo", new ListTodoController());
+        controllers.put("/todo/create", new CreateTodoController());
+        controllers.put("/todo/edit", new UpdateTodoController());
+        controllers.put("/todo/delete", new DeleteTodoController());
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+            throws ServletException, IOException {
+
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null) {
+            pathInfo = "/";
+        }
+
+        Controller controller = controllers.get(pathInfo);
+        if (controller == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        controller.handleRequest(request, response, srv);
+    }
+}
+
+interface Controller {
+    void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+            throws ServletException, IOException;
+}
+
+// ListTodos
+class ListTodoController implements Controller {
+
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+            throws ServletException, IOException {
+        ServletContext scx = srv.getServletContext();
+        Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
+        response.setContentType("application/json");
+
+        List<Todo> todos = new ArrayList<>();
 
         try {
             PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM todo");
@@ -47,12 +87,18 @@ public class TodoServlet extends HttpServlet {
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        resp.getWriter().print(mapper.writeValueAsString(todos));
-
+        response.getWriter().print(mapper.writeValueAsString(todos));
     }
 
-    public void getTodo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext scx = getServletContext();
+}
+
+// GetTodo
+class GetTodoController implements Controller {
+
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+            throws ServletException, IOException {
+
+        ServletContext scx = srv.getServletContext();
         Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
         response.setContentType("application/json");
         Todo todo = new Todo();
@@ -75,9 +121,13 @@ public class TodoServlet extends HttpServlet {
         response.getWriter().print(mapper.writeValueAsString(todo));
     }
 
-    protected void createTodo(HttpServletRequest request, HttpServletResponse response)
+}
+
+// CreateTodo
+class CreateTodoController implements Controller {
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
-        ServletContext scx = getServletContext();
+        ServletContext scx = srv.getServletContext();
         Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -105,9 +155,13 @@ public class TodoServlet extends HttpServlet {
         }
     }
 
-    public void updateTodo(HttpServletRequest request, HttpServletResponse response)
+}
+
+// UpdateTodo
+class UpdateTodoController implements Controller {
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
-        ServletContext scx = getServletContext();
+        ServletContext scx = srv.getServletContext();
         Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -131,9 +185,13 @@ public class TodoServlet extends HttpServlet {
         }
     }
 
-    public void deleteTodo(HttpServletRequest request, HttpServletResponse response)
+}
+
+// DeleteTodo
+class DeleteTodoController implements Controller {
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
-        ServletContext scx = getServletContext();
+        ServletContext scx = srv.getServletContext();
         Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
 
         int todoId = Integer.parseInt(request.getParameter("id"));

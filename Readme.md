@@ -20,7 +20,7 @@ make install
 next, run the project
 
 ```bash
-make dev
+make deploy
 ```
 
 
