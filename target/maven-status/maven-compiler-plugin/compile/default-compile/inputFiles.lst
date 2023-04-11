@@ -1,10 +1,4 @@
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/data_transfer_object/TodoDTO.java
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/handler/TodoHandler.java
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/implementation/TodoImplementation.java
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/config/ModelMapperConfig.java
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/Application.java
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/config/ConfigTomlReader.java
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/implementation/TodoService.java
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/mapper/TodoMapper.java
+/home/tirries/Documents/java_proj/todo-app/src/main/java/com/TodoServlet.java
+/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/config/DatabaseBootstrap.java
 /home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/models/Todo.java
-/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/repository/TodoRepository.java
+/home/tirries/Documents/java_proj/todo-app/src/main/java/com/example/config/DatabaseConn.java

@@ -1,6 +1,3 @@
-dev:
-	mvn spring-boot:run
-
 deploy:
 	mvn clean package wildfly:deploy
 

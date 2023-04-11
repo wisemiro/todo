@@ -1,12 +1,4 @@
-com/example/implementation/TodoService.class
-com/example/config/ModelMapperConfig.class
-com/example/data_transfer_object/TodoDTO.class
-com/example/data_transfer_object/TodoDTO$TodoDTOBuilder.class
-com/example/implementation/TodoImplementation.class
-com/example/mapper/TodoMapper.class
+com/TodoServlet.class
+com/example/config/DatabaseConn.class
 com/example/models/Todo.class
-com/example/repository/TodoRepository.class
-com/example/Application.class
-com/example/handler/TodoHandler.class
-com/example/models/Todo$TodoBuilder.class
-com/example/config/ConfigTomlReader.class
+com/example/config/DatabaseBootstrap.class
