@@ -19,6 +19,23 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
 
+  server:
+    image: quay.io/wildfly/wildfly
+    container_name: wildfly
+    restart: always
+    networks:
+      todo:
+        aliases:
+          - wildfly_server
+    environment:
+      - JBOSS_USER=${JBOSS_USER}
+      - JBOSS_PASSWORD=${JBOSS_PASSWORD}
+      - JBOSS_BIND_ADDRESS=${JBOSS_BIND_ADDRESS}
+      - JBOSS_BIND_ADDRESS_MANAGEMENT=${JBOSS_BIND_ADDRESS_MANAGEMENT}
+    ports:
+      - "9000:9990"
+
+
 volumes:
   dbdata:
   cache:

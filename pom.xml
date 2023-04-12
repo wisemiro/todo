@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.example</groupId>
     <artifactId>todo-app</artifactId>
@@ -15,22 +16,34 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-        <!-- Servlet API -->
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>8.0.1</version>
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
-            <scope>provided</scope>
         </dependency>
-        <!-- Jackson JSON API -->
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.14.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>javax.faces-api</artifactId>
+            <version>2.3</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>todo-app</finalName>
@@ -41,10 +54,10 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>4.1.0.Beta1</version>
                 <configuration>
-                    <hostname>192.168.1.229</hostname>
-                    <port>9990</port>
-                    <username>wise</username>
-                    <password>50451103aA</password>
+                    <hostname>0.0.0.0</hostname>
+                    <port>9000</port>
+                    <username>todo</username>
+                    <password>password</password>
                 </configuration>
             </plugin>
         </plugins>

@@ -2,16 +2,14 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <!-- <servlet>
+    <servlet-name>TodoServlet</servlet-name>
+    <servlet-class>com.example.TodoServlet</servlet-class>
+  </servlet>
 
-<!--  <servlet>-->
-<!--    <servlet-name>TodoServlet</servlet-name>-->
-<!--    <servlet-class>com.example.servlets.TodoServlet</servlet-class>-->
-<!--  </servlet>-->
-
-<!--  <servlet-mapping>-->
-<!--    <servlet-name>TodoServlet</servlet-name>-->
-<!--    <url-pattern>/todo</url-pattern>-->
-<!--  </servlet-mapping>-->
-
+  <servlet-mapping>
+    <servlet-name>TodoServlet</servlet-name>
+    <url-pattern>/todo</url-pattern>
+  </servlet-mapping> -->
 
 </web-app>

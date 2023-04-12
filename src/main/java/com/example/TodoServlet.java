@@ -1,4 +1,4 @@
-package com.example.servlets;
+package com.example;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.example.models.Todo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebServlet("/todo/*")
+@WebServlet(name = "todoServlet", urlPatterns = { "/todo/*" })
 public class TodoServlet extends HttpServlet {
 
     private Map<String, Controller> controllers;
@@ -32,8 +32,8 @@ public class TodoServlet extends HttpServlet {
         controllers = new HashMap<>();
         controllers.put("/todo", new ListTodoController());
         controllers.put("/todo/create", new CreateTodoController());
-        controllers.put("/todo/edit", new UpdateTodoController());
-        controllers.put("/todo/delete", new DeleteTodoController());
+        controllers.put("/todo/edit/{id}", new UpdateTodoController());
+        controllers.put("/todo/delete/{id}", new DeleteTodoController());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
@@ -64,8 +64,8 @@ class ListTodoController implements Controller {
 
     public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
-        ServletContext scx = srv.getServletContext();
-        Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
+        ServletContext sctx = srv.getServletContext();
+        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
         response.setContentType("application/json");
 
         List<Todo> todos = new ArrayList<>();
@@ -98,8 +98,8 @@ class GetTodoController implements Controller {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
 
-        ServletContext scx = srv.getServletContext();
-        Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
+        ServletContext sctx = srv.getServletContext();
+        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
         response.setContentType("application/json");
         Todo todo = new Todo();
         int todoId = Integer.parseInt(request.getParameter("id"));
@@ -127,8 +127,8 @@ class GetTodoController implements Controller {
 class CreateTodoController implements Controller {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
-        ServletContext scx = srv.getServletContext();
-        Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
+        ServletContext sctx = srv.getServletContext();
+        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
 
         ObjectMapper mapper = new ObjectMapper();
         Todo todo = mapper.readValue(request.getInputStream(), Todo.class);
@@ -161,8 +161,8 @@ class CreateTodoController implements Controller {
 class UpdateTodoController implements Controller {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
-        ServletContext scx = srv.getServletContext();
-        Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
+        ServletContext sctx = srv.getServletContext();
+        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
 
         ObjectMapper mapper = new ObjectMapper();
         Todo todo = mapper.readValue(request.getInputStream(), Todo.class);
@@ -191,8 +191,8 @@ class UpdateTodoController implements Controller {
 class DeleteTodoController implements Controller {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
-        ServletContext scx = srv.getServletContext();
-        Connection dbConnection = (Connection) scx.getAttribute("dbConnection");
+        ServletContext sctx = srv.getServletContext();
+        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
 
         int todoId = Integer.parseInt(request.getParameter("id"));
 

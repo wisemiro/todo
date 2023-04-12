@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebListener;
 public class DatabaseBootstrap implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent sce) {
-        DatabaseConn dbConnection = new DatabaseConn("jdbc:postgresql://localhost:5432/todo?sslmode=disable", "todo",
+        DBConn dbConnection = new DBConn("jdbc:postgresql://localhost:5432/todo?sslmode=disable", "todo",
                 "todo");
 
         Statement statement = null;
@@ -21,15 +21,14 @@ public class DatabaseBootstrap implements ServletContextListener {
         try {
             statement = dbConnection.connect().createStatement();
             statement.execute("CREATE DATABASE IF NOT EXISTS todos");
-            DatabaseConn dbConnection2 = new DatabaseConn("jdbc:postgresql://localhost:5432/todo?sslmode=disable",
+            DBConn dbConnection2 = new DBConn("jdbc:postgresql://localhost:5432/todo?sslmode=disable",
                     "todo",
                     "todo");
             statement2 = dbConnection2.connect().createStatement();
-
             statement2.execute(
                     "create table if not exists todo(id bigint not null, task text, PRIMARY KEY(id))");
 
-            sce.getServletContext().setAttribute("dbConnection", dbConnection2.connect());
+            sce.getServletContext().setAttribute("dbConn", dbConnection2.connect());
 
         } catch (SQLException sqEx) {
             sqEx.printStackTrace();
@@ -47,8 +46,8 @@ public class DatabaseBootstrap implements ServletContextListener {
         }
     }
 
-    public void contextDestroyed(ServletContextEvent sce) {
-        Connection connection = (Connection) sce.getServletContext().getAttribute("dbConnection");
+    public void contextRm(ServletContextEvent sce) {
+        Connection connection = (Connection) sce.getServletContext().getAttribute("dbConn");
 
         if (connection != null) {
             try {
