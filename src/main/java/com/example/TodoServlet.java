@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.example.models.Todo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/* to access use: http://0.0.0.0:9000/todo-app/todo */
+
 @WebServlet(name = "todoServlet", urlPatterns = { "/todo/*" })
 public class TodoServlet extends HttpServlet {
 
@@ -36,6 +38,7 @@ public class TodoServlet extends HttpServlet {
         controllers.put("/todo/delete/{id}", new DeleteTodoController());
     }
 
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
 

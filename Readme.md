@@ -1,7 +1,7 @@
 
 # TODO API-WEB
 
-API service using maven, springboot framework and postgreSQL.
+API service using maven, java and postgreSQL.
 
 cd into the build folder and run
 

@@ -1,3 +1,6 @@
+run:
+	mvn clean compile package
+
 deploy:
 	mvn clean compile package wildfly:deploy
 
@@ -18,3 +21,9 @@ compile:
 
 pkg:
 	mvn package
+
+wire:
+	docker exec -it wildfly /bin/bash
+
+migrateup:
+	mvn clean flyway:migrate -Dflyway.configFiles=flyway.conf

@@ -20,13 +20,12 @@ public class DatabaseBootstrap implements ServletContextListener {
 
         try {
             statement = dbConnection.connect().createStatement();
-            statement.execute("CREATE DATABASE IF NOT EXISTS todos");
             DBConn dbConnection2 = new DBConn("jdbc:postgresql://localhost:5432/todo?sslmode=disable",
                     "todo",
                     "todo");
             statement2 = dbConnection2.connect().createStatement();
             statement2.execute(
-                    "create table if not exists todo(id bigint not null, task text, PRIMARY KEY(id))");
+                    "create table if not exists todo(id bigserial primary key, task text");
 
             sce.getServletContext().setAttribute("dbConn", dbConnection2.connect());
 
