@@ -11,19 +11,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.example.models.Todo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /* to access use: http://0.0.0.0:8080/todo-app/todo */
 
-@WebServlet(name = "todoServlet", urlPatterns = { "/*" })
+// @WebServlet(name = "todoServlet", urlPatterns = { "/*" })
+@WebServlet("/")
 public class TodoServlet extends HttpServlet {
 
     private Map<String, Controller> controllers;

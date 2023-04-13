@@ -17,7 +17,7 @@ public class DBConn {
     }
 
     public Connection connect() {
-        Connection connection = null;
+        Connection connection;
         try {
             connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
         } catch (SQLException ex) {
