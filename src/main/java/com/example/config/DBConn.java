@@ -16,13 +16,10 @@ public class DBConn {
 
     }
 
-    public Connection connect() {
-        Connection connection;
-        try {
-            connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    public Connection connect() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword)) {
+            return connection;
         }
-        return connection;
     }
+
 }
