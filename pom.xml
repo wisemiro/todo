@@ -62,7 +62,7 @@
                 <version>4.1.0.Beta1</version>
                 <configuration>
                     <hostname>0.0.0.0</hostname>
-                    <port>9000</port>
+                    <port>9990</port>
                     <username>todo</username>
                     <password>password</password>
                 </configuration>

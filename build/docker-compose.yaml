@@ -33,7 +33,8 @@ services:
       - JBOSS_BIND_ADDRESS=${JBOSS_BIND_ADDRESS}
       - JBOSS_BIND_ADDRESS_MANAGEMENT=${JBOSS_BIND_ADDRESS_MANAGEMENT}
     ports:
-      - "9000:9990"
+      - "9990:9990"
+      - "8080:8080"
 
 
 volumes:
