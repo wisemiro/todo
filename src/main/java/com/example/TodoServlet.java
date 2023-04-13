@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.example.models.Todo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/* to access use: http://0.0.0.0:9000/todo-app/todo */
+/* to access use: http://0.0.0.0:8080/todo-app/todo */
 
-@WebServlet(name = "todoServlet", urlPatterns = { "/todo/*" })
+@WebServlet(name = "todoServlet", urlPatterns = { "/*" })
 public class TodoServlet extends HttpServlet {
 
     private Map<String, Controller> controllers;
@@ -32,13 +32,12 @@ public class TodoServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         controllers = new HashMap<>();
-        controllers.put("/todo", new ListTodoController());
+        controllers.put("todo", new ListTodoController());
         controllers.put("/todo/create", new CreateTodoController());
         controllers.put("/todo/edit/{id}", new UpdateTodoController());
         controllers.put("/todo/delete/{id}", new DeleteTodoController());
     }
 
-    
     protected void doGet(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
             throws ServletException, IOException {
 

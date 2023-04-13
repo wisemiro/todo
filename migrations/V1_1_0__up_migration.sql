@@ -1,4 +1,4 @@
-create table if not exists todo(
+create table if not exists public.todo(
     id bigserial primary key,
     task text
 );
