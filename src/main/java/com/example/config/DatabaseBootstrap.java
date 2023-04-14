@@ -1,6 +1,7 @@
 package com.example.config;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -10,51 +11,43 @@ import jakarta.servlet.annotation.WebListener;
 
 @WebListener
 public class DatabaseBootstrap implements ServletContextListener {
+    private static final String DB_URL = "jdbc:postgresql://172.18.0.2:5432/todo";
+    private static final String DB_USERNAME = "todo";
+    private static final String DB_PASSWORD = "todo";
+    private Connection conn;
 
-    public void contextInitialized(ServletContextEvent sce) {
-        DBConn dbConnection = new DBConn("jdbc:postgresql://localhost:5432/todo?sslmode=disable", "todo",
-                "todo");
-
-        Statement statement = null;
-        Statement statement2 = null;
-
+    @Override
+    public void contextInitialized(ServletContextEvent event) {
         try {
-            statement = dbConnection.connect().createStatement();
-            DBConn dbConnection2 = new DBConn("jdbc:postgresql://localhost:5432/todo?sslmode=disable",
-                    "todo",
-                    "todo");
-            statement2 = dbConnection2.connect().createStatement();
-            statement2.execute(
-                    "create table if not exists todo(id bigserial primary key, task text");
-
-            sce.getServletContext().setAttribute("dbConn", dbConnection2.connect());
-
-        } catch (SQLException sqEx) {
-            sqEx.printStackTrace();
-        } finally {
-            try {
-                if (statement != null)
-                    statement.close();
-
-                if (statement2 != null)
-                    statement2.close();
-
-            } catch (SQLException sqlEx2) {
-                sqlEx2.printStackTrace();
-            }
+            conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            System.out.println("Connected to Database.");
+            createTables(conn);
+            System.out.println("Tables created");
+            event.getServletContext().setAttribute("dbConnection", conn);
+            System.out.println("Saved connection to ServletContext");
+        } catch (SQLException e) {
+            throw new RuntimeException("Cannot connect to database", e);
         }
     }
 
-    public void contextRm(ServletContextEvent sce) {
-        Connection connection = (Connection) sce.getServletContext().getAttribute("dbConn");
-
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException sqlEx) {
-                sqlEx.printStackTrace();
-            }
+    @Override
+    public void contextDestroyed(ServletContextEvent event) {
+        try {
+            conn.close();
+            System.out.println("Connection closed.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+    }
 
+    private void createTables(Connection conn) throws SQLException {
+        try (Statement stmt = conn.createStatement()) {
+            // Create todo
+            stmt.execute("CREATE TABLE IF NOT EXISTS todo (id SERIAL PRIMARY KEY, task VARCHAR(255) NOT NULL)");
+        }
+    }
+
+    public Connection getConnection() {
+        return conn;
     }
 }

@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.models.Todo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,13 +21,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.example.models.Todo;
-import com.fasterxml.jackson.databind.ObjectMapper;
+/* to access use: http://0.0.0.0:8080/todo-app/todo/ */
 
-/* to access use: http://0.0.0.0:8080/todo-app/todo */
-
-// @WebServlet(name = "todoServlet", urlPatterns = { "/*" })
-@WebServlet("/")
+@WebServlet(name = "todoServlet", urlPatterns = { "/todo/*" })
 public class TodoServlet extends HttpServlet {
 
     private Map<String, Controller> controllers;
@@ -33,15 +32,15 @@ public class TodoServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         controllers = new HashMap<>();
-        controllers.put("todo", new ListTodoController());
+        controllers.put("/todo", new ListTodoController());
         controllers.put("/todo/create", new CreateTodoController());
         controllers.put("/todo/edit/{id}", new UpdateTodoController());
         controllers.put("/todo/delete/{id}", new DeleteTodoController());
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String pathInfo = request.getPathInfo();
         if (pathInfo == null) {
             pathInfo = "/";
@@ -53,25 +52,25 @@ public class TodoServlet extends HttpServlet {
             return;
         }
 
-        controller.handleRequest(request, response, srv);
+        controller.handleRequest(request, response, getServletContext());
     }
+
 }
 
 interface Controller {
-    void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+    void handleRequest(HttpServletRequest request, HttpServletResponse response,
+            ServletContext servletContext)
             throws ServletException, IOException;
 }
 
 // ListTodos
 class ListTodoController implements Controller {
 
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, ServletContext srv)
             throws ServletException, IOException {
-        ServletContext sctx = srv.getServletContext();
-        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
+        Connection dbConnection = (Connection) srv.getAttribute("dbConnection");
         response.setContentType("application/json");
-
-        List<Todo> todos = new ArrayList<>();
+        List<Todo> todos = new ArrayList<Todo>();
 
         try {
             PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM todo");
@@ -98,11 +97,10 @@ class ListTodoController implements Controller {
 // GetTodo
 class GetTodoController implements Controller {
 
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, ServletContext srv)
             throws ServletException, IOException {
 
-        ServletContext sctx = srv.getServletContext();
-        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
+        Connection dbConnection = (Connection) srv.getAttribute("dbConnection");
         response.setContentType("application/json");
         Todo todo = new Todo();
         int todoId = Integer.parseInt(request.getParameter("id"));
@@ -128,10 +126,10 @@ class GetTodoController implements Controller {
 
 // CreateTodo
 class CreateTodoController implements Controller {
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, ServletContext srv)
             throws ServletException, IOException {
-        ServletContext sctx = srv.getServletContext();
-        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
+
+        Connection dbConnection = (Connection) srv.getAttribute("dbConnection");
 
         ObjectMapper mapper = new ObjectMapper();
         Todo todo = mapper.readValue(request.getInputStream(), Todo.class);
@@ -162,10 +160,10 @@ class CreateTodoController implements Controller {
 
 // UpdateTodo
 class UpdateTodoController implements Controller {
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, ServletContext srv)
             throws ServletException, IOException {
-        ServletContext sctx = srv.getServletContext();
-        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
+
+        Connection dbConnection = (Connection) srv.getAttribute("dbConnection");
 
         ObjectMapper mapper = new ObjectMapper();
         Todo todo = mapper.readValue(request.getInputStream(), Todo.class);
@@ -192,10 +190,10 @@ class UpdateTodoController implements Controller {
 
 // DeleteTodo
 class DeleteTodoController implements Controller {
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet srv)
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response, ServletContext srv)
             throws ServletException, IOException {
-        ServletContext sctx = srv.getServletContext();
-        Connection dbConnection = (Connection) sctx.getAttribute("dbConn");
+
+        Connection dbConnection = (Connection) srv.getAttribute("dbConnection");
 
         int todoId = Integer.parseInt(request.getParameter("id"));
 
