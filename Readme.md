@@ -9,20 +9,25 @@ cd into the build folder and run
 docker-compose up
 ```
 
-This will build a container for the postgreSQL database. The datasource used.
+This will build a containers for the postgreSQL database, Wildfly server & PgAdmin. 
 
-cd to project root dir and run to install required dependencies.
+cd into the config folder, in the DatabaseBootstrap file. 
+Change the postgres address to your container address.
+i.e 
+<pre>
+jdbc:postgresql://[POSTGRES_CONTAINER_ADDRESS]:5432/todo
+</pre>
 
-```bash
-make install
-```
-
-next, deploy the project to wildfly
+Deploy the project to wildfly
 
 ```bash
 make deploy
-
 ```
+<br/><br/>
+
+Access console dashboard at: http://0.0.0.0:9990/
+
+<br/><br/>
 
 HTTP requests urls
 
